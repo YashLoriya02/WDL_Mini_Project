@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="/static/logo.png" type="image/png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <title>SmartSelects | Find your phone</title>
+  <style>
+    .main_container_mobiles {
+      /* width: 70vw; */
+      display: flex;
+      justify-content: end;
+      margin-left: 20.2vw;
+      margin-top: 0rem;
+    }
+
+    .table_div {
+      display: flex;
+      overflow: auto;
+      letter-spacing: 0.05rem;
+    }
+
+    .main_div {
+      padding: 10px;
+      display: flex;
+      margin-bottom: 5px;
+      flex-direction: column;
+      border: 1px solid rgb(13, 170, 201);
+    }
+
+    .price_name_div {
+      border: 1px solid rgb(13, 170, 201);
+      /* width: 26vw; */
+      font-size: 1.3rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 1.5rem 0 1rem 0;
+    }
+
+    .img_div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .img_div img {
+      height: 250px;
+    }
+
+    .spec_div {
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 1rem;
+      width: 28vw;
+      padding: 0 2rem;
+      text-align: center;
+      height: 38px;
+    }
+
+    .dabba {
+      background-color: rgb(71, 70, 70);
+      width: 20vw;
+      text-align: left;
+      padding: 10px 0;
+      color: white;
+    }
+
+    .inner {
+      overflow: auto;
+      height: 35vh;
+    }
+
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      box-shadow: inset 0 0 0px grey;
+      border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(208, 208, 208, 0.655);
+      border-radius: 5px;
+    }
+
+    .head {
+      background-color: rgba(39, 39, 39, 0.874) !important;
+      /* color: red; */
+      padding: 10px;
+      font-size: 22px;
+    }
+
+    .checks {
+      /* padding: 0 10px; */
+      margin: 10px;
+    }
+
+    .inputs {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .min input {
+      width: 9vw;
+    }
+
+    .sidebar {
+      position: absolute;
+      overflow: auto;
+      height: 130%;
+    }
+
+    .max input {
+      width: 9vw;
+    }
+
+    .sorting {
+      display: flex;
+      justify-content: end;
+      padding: 20px 20px;
+      /* padding-top: 13px; */
+    }
+
+    /* .hr {
+      display: flex;
+      justify-content: end;
+      height: 5px;
+    } */
+
+    .sort_btn {
+      padding: .5rem 2rem;
+    }
+
+    .filters {
+      padding: 0px 10px;
+      color: aqua;
+      margin-bottom: -10px;
+      letter-spacing: 3px;
+      font-weight: 400;
+    }
+
+    .logo {
+      width: 42px;
+      height: 40px;
+      border-radius: 30px;
+      margin: 1rem;
+    }
+  </style>
+</head>
+
+<body>
+  {% csrf_token %}
+  <nav class="navbar navbar-expand-lg bg-body" style="height: 4rem;" data-bs-theme="dark">
+    <div class="container-fluid">
+      <img class="logo" src="/static/logo.png" alt="">
+      <a class="navbar-brand" href="/api/homepage">SmartSelects</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/api/homepage">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/api/home">Find your phone</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/api/searchQuery">Search Devices</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/api/about">About us</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="sidebar">
+    <div class="dabba">
+      <h2 class="filters">Filters :</h2>
+
+    </div>
+    <div class="dabba">
+      <h2 class="head">Price</h2>
+      <div class="inputs">
+        <div class="pricing">
+          <div class="btn-group">
+            <button type="button" id="min_btn" class="btn btn-light dropdown-toggle sort_btn" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Min
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item dropdown-min-price" href="#" data-text="5000">5000</a></li>
+              <li><a class="dropdown-item dropdown-min-price" href="#" data-text="10000">10000</a></li>
+              <li><a class="dropdown-item dropdown-min-price" href="#" data-text="15000">15000</a></li>
+              <li><a class="dropdown-item dropdown-min-price" href="#" data-text="20000">20000</a></li>
+              <li><a class="dropdown-item dropdown-min-price" href="#" data-text="25000">25000</a></li>
+              <li><a class="dropdown-item dropdown-min-price" href="#" data-text="30000">30000</a></li>
+              <li><a class="dropdown-item dropdown-min-price" href="#" data-text="40000">40000</a></li>
+              <li><a class="dropdown-item dropdown-min-price" href="#" data-text="50000">50000</a></li>
+              <li><a class="dropdown-item dropdown-min-price" href="#" data-text="60000">60000</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pricing">
+          <div class="btn-group">
+            <button type="button" id="max_btn" class="btn btn-light dropdown-toggle sort_btn" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Max
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item dropdown-max-price" href="#" data-text="5000">5000</a></li>
+              <li><a class="dropdown-item dropdown-max-price" href="#" data-text="10000">10000</a></li>
+              <li><a class="dropdown-item dropdown-max-price" href="#" data-text="15000">15000</a></li>
+              <li><a class="dropdown-item dropdown-max-price" href="#" data-text="20000">20000</a></li>
+              <li><a class="dropdown-item dropdown-max-price" href="#" data-text="25000">25000</a></li>
+              <li><a class="dropdown-item dropdown-max-price" href="#" data-text="30000">30000</a></li>
+              <li><a class="dropdown-item dropdown-max-price" href="#" data-text="40000">40000</a></li>
+              <li><a class="dropdown-item dropdown-max-price" href="#" data-text="50000">50000</a></li>
+              <li><a class="dropdown-item dropdown-max-price" href="#" data-text="60000">60000</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dabba">
+      <h2 class="head">Brands</h2>
+      <div class="inner">
+        <div class="form-check checks">
+          <input class="form-check-input" type="checkbox" value="" id="samsung">
+          <label class="form-check-label" for="samsung">
+            Samsung
+          </label>
+        </div>
+        <div class="form-check checks">
+          <input class="form-check-input" type="checkbox" value="" id="xiaomi">
+          <label class="form-check-label" for="xiaomi">
+            Xiaomi
+          </label>
+        </div>
+        <div class="form-check checks">
+          <input class="form-check-input" type="checkbox" value="" id="oneplus">
+          <label class="form-check-label" for="oneplus">
+            One Plus
+          </label>
+        </div>
+        <div class="form-check checks">
+          <input class="form-check-input" type="checkbox" value="" id="apple">
+          <label class="form-check-label" for="apple">
+            Apple
+          </label>
+        </div>
+        <div class="form-check checks">
+          <input class="form-check-input" type="checkbox" value="" id="realme">
+          <label class="form-check-label" for="realme">
+            Realme
+          </label>
+        </div>
+        <div class="form-check checks">
+          <input class="form-check-input" type="checkbox" value="" id="oppo">
+          <label class="form-check-label" for="oppo">
+            Oppo
+          </label>
+        </div>
+        <div class="form-check checks">
+          <input class="form-check-input" type="checkbox" value="" id="vivo">
+          <label class="form-check-label" for="vivo">
+            Vivo
+          </label>
+        </div>
+        <div class="form-check checks">
+          <input class="form-check-input" type="checkbox" value="" id="motorola">
+          <label class="form-check-label" for="moto">
+            Motorola
+          </label>
+        </div>
+        <div class="form-check checks">
+          <input class="form-check-input" type="checkbox" value="" id="poco">
+          <label class="form-check-label" for="poco">
+            Poco
+          </label>
+        </div>
+        <div class="form-check checks">
+          <input class="form-check-input" type="checkbox" value="" id="honor">
+          <label class="form-check-label" for="honor">
+            Honor
+          </label>
+        </div>
+        <div class="form-check checks">
+          <input class="form-check-input" type="checkbox" value="" id="tecno">
+          <label class="form-check-label" for="tecno">
+            Tecno
+          </label>
+        </div>
+        <div class="form-check checks">
+          <input class="form-check-input" type="checkbox" value="" id="infinix">
+          <label class="form-check-label" for="infinix">
+            Infinix
+          </label>
+        </div>
+        <div class="form-check checks">
+          <input class="form-check-input" type="checkbox" value="" id="google">
+          <label class="form-check-label" for="google">
+            Google
+          </label>
+        </div>
+        <div class="form-check checks">
+          <input class="form-check-input" type="checkbox" value="" id="asus">
+          <label class="form-check-label" for="asus">
+            Asus
+          </label>
+        </div>
+        <div class="form-check checks">
+          <input class="form-check-input" type="checkbox" value="" id="nokia">
+          <label class="form-check-label" for="nokia">
+            Nokia
+          </label>
+        </div>
+        <div class="form-check checks">
+          <input class="form-check-input" type="checkbox" value="" id="lava">
+          <label class="form-check-label" for="lava">
+            Lava
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="dabba">
+      <h2 class="head">Battery Size</h2>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="3000_mah_above">
+        <label class="form-check-label" for="3000_mah_above">
+          3000 mAh and above
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="4000_mah_above">
+        <label class="form-check-label" for="4000_mah_above">
+          4000 mAh and above
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="5000_mah_above">
+        <label class="form-check-label" for="5000_mah_above">
+          5000 mAh and above
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="6000_mah_above">
+        <label class="form-check-label" for="6000_mah_above">
+          6000 mAh and above
+        </label>
+      </div>
+    </div>
+    <div class="dabba">
+      <h2 class="head">Screen Size</h2>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="4_7_inch_5_inch">
+        <label class="form-check-label" for="4.7_inch_5_inch">
+          4.7 - 5 inch
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="5_inch_5_5_inch">
+        <label class="form-check-label" for="5_inch_5.5_inch">
+          5 - 5.5 inch
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="5_5_inch_6_inch">
+        <label class="form-check-label" for="5.5_inch_6_inch">
+          5.5 - 6 inch
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="6_inch_6_5_inch">
+        <label class="form-check-label" for="6_inch_6.5_inch">
+          6 - 6.5 inch
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="6_5_inch_above">
+        <label class="form-check-label" for="6.5_inch_above">
+          6.5 and above
+        </label>
+      </div>
+    </div>
+    <div class="dabba">
+      <h2 class="head">Display Type</h2>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="amoled">
+        <label class="form-check-label" for="amoled">
+          AMOLED
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="ips_lcd">
+        <label class="form-check-label" for="ips_lcd">
+          IPS LCD
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="super_amoled">
+        <label class="form-check-label" for="super_amoled">
+          Super AMOLED
+        </label>
+      </div>
+    </div>
+    <div class="dabba">
+      <h2 class="head">Screen Resolution</h2>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="2048_x_1536_2k">
+        <label class="form-check-label" for="2048_x_1536_2k">
+          2048 X 1536 (2K)
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="1920_x_1080_full_hd">
+        <label class="form-check-label" for="1920_x_1080_full_hd">
+          1920 X 1080 (Full HD)
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="1280_x_720_hd">
+        <label class="form-check-label" for="1280_x_720_hd">
+          1280 X 720 (HD)
+        </label>
+      </div>
+    </div>
+    <div class="dabba">
+      <h2 class="head">Rear Camera</h2>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="13_mp_above">
+        <label class="form-check-label" for="13mp_above">
+          13 MP and above
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="20_mp_above">
+        <label class="form-check-label" for="20mp_above">
+          20 MP and above
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="48_mp_above">
+        <label class="form-check-label" for="48mp_above">
+          48 MP and above
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="64_mp_above">
+        <label class="form-check-label" for="64mp_above">
+          64 MP and above
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="108_mp_above">
+        <label class="form-check-label" for="108mp_above">
+          108 MP and above
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="200_mp_above">
+        <label class="form-check-label" for="200mp_above">
+          200 MP and above
+        </label>
+      </div>
+    </div>
+    <div class="dabba">
+      <h2 class="head">Front Camera</h2>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="5_mp_above">
+        <label class="form-check-label" for="5mp_above">
+          5 MP and above
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="8_mp_above">
+        <label class="form-check-label" for="8mp_above">
+          8 MP and above
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="12_mp_above">
+        <label class="form-check-label" for="12mp_above">
+          12 MP and above
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="16_mp_above">
+        <label class="form-check-label" for="16mp_above">
+          16 MP and above
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="32_mp_above">
+        <label class="form-check-label" for="32mp_above">
+          32 MP and above
+        </label>
+      </div>
+    </div>
+    <div class="dabba">
+      <h2 class="head">CPU</h2>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="quad_core">
+        <label class="form-check-label" for="quad_core">
+          Quad Core
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="octa_core">
+        <label class="form-check-label" for="octa_core">
+          Octa Core
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="1_4_ghz_above">
+        <label class="form-check-label" for="1_4_ghz_above">
+          1.4 GHz and above
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="2_ghz_above">
+        <label class="form-check-label" for="2_ghz_above">
+          2 GHz and above
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="2_3_ghz_above">
+        <label class="form-check-label" for="2_3_ghz_above">
+          2.3 GHz and above
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="3_ghz_above">
+        <label class="form-check-label" for="3_ghz_above">
+          3 GHz and above
+        </label>
+      </div>
+    </div>
+    <div class="dabba">
+      <h2 class="head">RAM</h2>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="3_gb_above">
+        <label class="form-check-label" for="3gb_above">
+          3 GB and above
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="4_gb_above">
+        <label class="form-check-label" for="4gb_above">
+          4 GB and above
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="6_gb_above">
+        <label class="form-check-label" for="6gb_above">
+          6 GB and above
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="8_gb_above">
+        <label class="form-check-label" for="8gb_above">
+          8 GB and above
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="12_gb_above">
+        <label class="form-check-label" for="12gb_above">
+          12 GB and above
+        </label>
+      </div>
+    </div>
+    <div class="dabba">
+      <h2 class="head">ROM</h2>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="32_gb_above">
+        <label class="form-check-label" for="32_gb_above">
+          32 GB and above
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="64_gb_above">
+        <label class="form-check-label" for="64_gb_above">
+          64 GB and above
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="128_gb_above">
+        <label class="form-check-label" for="128_gb_above">
+          128 GB and above
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="256_gb_above">
+        <label class="form-check-label" for="256_gb_above">
+          256 GB and above
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="512_gb_above">
+        <label class="form-check-label" for="512_gb_above">
+          512 GB and above
+        </label>
+      </div>
+    </div>
+    <div class="dabba">
+      <h2 class="head">Features</h2>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="3g">
+        <label class="form-check-label" for="3g">
+          3G
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="4g">
+        <label class="form-check-label" for="4g">
+          4G
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="5g">
+        <label class="form-check-label" for="5g">
+          5G
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="nfc">
+        <label class="form-check-label" for="nfc">
+          NFC
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="ir_blaster">
+        <label class="form-check-label" for="ir_blaster">
+          IR Blaster
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="wireless_charging">
+        <label class="form-check-label" for="wireless_charging">
+          Wireless Charging
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="dual_display">
+        <label class="form-check-label" for="dual_display">
+          Dual Display
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="foldable_display">
+        <label class="form-check-label" for="foldable_display">
+          Foldable Display
+        </label>
+      </div>
+      <div class="form-check checks">
+        <input class="form-check-input" type="checkbox" value="" id="infinity_display">
+        <label class="form-check-label" for="infinity_display">
+          Infinity Display
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="sorting">
+    <div class="btn-group">
+      <button type="button" id="myBtn" class="btn btn-info dropdown-toggle sort_btn" data-bs-toggle="dropdown"
+        aria-expanded="false">
+        Sort By
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item dropdown-sort" href="#" data-text="Popularity">Popularity</a></li>
+        <li><a class="dropdown-item dropdown-sort" href="#" data-text="Price High to Low">Price High to Low</a></li>
+        <li><a class="dropdown-item dropdown-sort" href="#" data-text="Price Low to High">Price Low to High</a></li>
+        <li><a class="dropdown-item dropdown-sort" href="#" data-text="CPU Speed">CPU Speed</a></li>
+        <li><a class="dropdown-item dropdown-sort" href="#" data-text="Battery Capacity">Battery Capacity</a></li>
+        <li><a class="dropdown-item dropdown-sort" href="#" data-text="Camera Resolution">Camera Resolution</a></li>
+        <li><a class="dropdown-item dropdown-sort" href="#" data-text="Ram">Ram</a></li>
+        <li><a class="dropdown-item dropdown-sort" href="#" data-text="Storage">Storage</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="main_container_mobiles">
+    <div class="table_div">
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+
+  <script>
+    const dropdownItems = document.querySelectorAll('.dropdown-sort');
+    const min = document.querySelectorAll('.dropdown-min-price')
+    const max = document.querySelectorAll('.dropdown-max-price')
+    const myBtn = document.getElementById('myBtn')
+    const min_btn = document.getElementById('min_btn')
+    const max_btn = document.getElementById('max_btn')
+
+    min.forEach(item => {
+      item.addEventListener('click', function (event) {
+        event.preventDefault();
+        selectedText = this.getAttribute('data-text');
+        min_btn.innerText = selectedText
+      });
+    });
+
+    max.forEach(item => {
+      item.addEventListener('click', function (event) {
+        event.preventDefault();
+        selectedText = this.getAttribute('data-text');
+        max_btn.innerText = selectedText
+      });
+    });
+
+    dropdownItems.forEach(item => {
+      item.addEventListener('click', function (event) {
+        event.preventDefault();
+        selectedText = this.getAttribute('data-text');
+        myBtn.innerText = selectedText
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const checkboxes = document.querySelectorAll('.form-check-input');
+
+      let checkboxList = []
+      let mainObj = {}
+      let checkboxCategoryList = []
+      let selectedOption = ''
+      let min_option = ''
+      let max_option = ''
+
+      min.forEach(item => {
+        item.addEventListener('click', function (event) {
+          min_option = event.target.getAttribute('data-text');
+          console.log(selectedOption);
+          sendDataToBackend(checkboxList, checkboxCategoryList, selectedOption, min_option, max_option);
+        });
+      });
+
+      max.forEach(item => {
+        item.addEventListener('click', function (event) {
+          max_option = event.target.getAttribute('data-text');
+          // console.log(selectedOption);
+          sendDataToBackend(checkboxList, checkboxCategoryList, selectedOption, min_option, max_option);
+        });
+      });
+
+      dropdownItems.forEach(item => {
+        item.addEventListener('click', function (event) {
+          selectedOption = event.target.getAttribute('data-text');
+          // console.log(selectedOption); 
+          sendDataToBackend(checkboxList, checkboxCategoryList, selectedOption, min_option, max_option);
+        });
+      });
+
+      checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+
+          if (checkbox.checked) {
+            checkboxList.push(checkbox.id)
+            checkboxCategory = checkbox.closest('.dabba').querySelector('.head').textContent.trim();
+            checkboxCategoryList.push(checkboxCategory)
+          }
+
+          min.forEach(item => {
+            item.addEventListener('click', function (event) {
+              min_option = event.target.getAttribute('data-text');
+              console.log(selectedOption);
+              sendDataToBackend(checkboxList, checkboxCategoryList, selectedOption, min_option, max_option);
+            });
+          });
+
+          max.forEach(item => {
+            item.addEventListener('click', function (event) {
+              max_option = event.target.getAttribute('data-text');
+              // console.log(selectedOption);
+              sendDataToBackend(checkboxList, checkboxCategoryList, selectedOption, min_option, max_option);
+            });
+          });
+
+          dropdownItems.forEach(item => {
+            item.addEventListener('click', function (event) {
+              selectedOption = event.target.getAttribute('data-text');
+              // console.log(selectedOption); 
+              sendDataToBackend(checkboxList, checkboxCategoryList, selectedOption, min_option, max_option);
+            });
+          });
+
+          sendDataToBackend(checkboxList, checkboxCategoryList, selectedOption, min_option, max_option);
+        });
+      });
+
+      function sendDataToBackend(id, category, selectedOption, min_option, max_option) {
+        const csrftoken = getCookie('csrftoken');
+
+        const dataObject = {
+          id: id,
+          category: category,
+          selectedOption: selectedOption,
+          min_option: min_option,
+          max_option: max_option
+        };
+
+        fetch('http://127.0.0.1:8000/api/receive-checkbox-ids/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+          },
+          body: JSON.stringify(dataObject)
+        })
+          .then(response => response.json())
+          .then(data => {
+            const tableDiv = document.querySelector('.table_div');
+            const jsondata = data;
+            const myData = jsondata.data;
+            console.log(data);
+            if (tableDiv && tableDiv.children.length > 0) {
+              const mainDivs = document.querySelectorAll('.main_div');
+              mainDivs.forEach((mainDiv, index) => {
+                const item = myData[index];
+                if (item) {
+                  const img = mainDiv.querySelector('.img_div img');
+                  if (img) {
+                    img.src = item.Image;
+                  }
+
+                  const priceNameDiv = mainDiv.querySelector('.price_name_div');
+                  if (priceNameDiv) {
+                    priceNameDiv.innerHTML = `${item.Name} - <span style="font-weight: bold;">${item.Price}</span>`;
+                  }
+
+                  const specDivs = mainDiv.querySelectorAll('.spec_div');
+                  specDivs.forEach((specDiv, specIndex) => {
+                    const spec = item.Specs[specIndex];
+                    if (spec) {
+                      specDiv.textContent = spec;
+                    }
+                  });
+                }
+              });
+
+            } else {
+              myData.forEach(item => {
+                const mainDiv = document.createElement('div');
+                mainDiv.classList.add('main_div');
+                const imgDiv = document.createElement('div');
+                imgDiv.classList.add('img_div');
+                const img = document.createElement('img');
+                img.src = item.Image;
+                img.alt = 'Image';
+                imgDiv.appendChild(img);
+                const priceNameDiv = document.createElement('div');
+                priceNameDiv.classList.add('price_name_div');
+                priceNameDiv.innerHTML = `${item.Name} -&ThickSpace; <span style="font-weight: bold;">${item.Price}</span>`;
+                mainDiv.appendChild(imgDiv);
+                mainDiv.appendChild(priceNameDiv);
+
+                item.Specs.forEach(spec => {
+                  const specDiv = document.createElement('div');
+                  specDiv.classList.add('spec_div');
+                  specDiv.textContent = spec;
+                  mainDiv.appendChild(specDiv);
+                });
+
+                tableDiv.appendChild(mainDiv);
+              });
+            }
+
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      }
+
+      function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+    });
+  </script>
+</body>
+
+</html>
