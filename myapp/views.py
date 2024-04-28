@@ -217,8 +217,22 @@ def fetch_data(cat, val, result_dict, min_option, max_option, selectedOption):
     
     if selectedOption == "Price High to Low":
         matching_documents = collection.find(query).sort('Price', pymongo.DESCENDING)
+
     elif selectedOption == "Price Low to High":
         matching_documents = collection.find(query).sort('Price', pymongo.ASCENDING)
+        
+    elif selectedOption == "Rear Camera Low to High":
+        matching_documents = collection.find(query)
+        matching_documents = sorted(matching_documents, key=lambda x: int(x['Spec6'].split('&')[0].split('MP')[0]))
+        
+    elif selectedOption == "Rear Camera High to Low":
+        matching_documents = collection.find(query)
+        matching_documents = sorted(matching_documents, key=lambda x: -int(x['Spec6'].split('MP')[0]))
+
+    elif selectedOption == "Battery High to Low":
+        matching_documents = collection.find(query)
+        matching_documents = sorted(matching_documents, key=lambda x: -int(x['Spec4'].split('mAh')[0]))
+
     else:
         matching_documents = collection.find(query)
     
@@ -235,9 +249,9 @@ def fetch_data(cat, val, result_dict, min_option, max_option, selectedOption):
         }
         new_list.append(new_item)
         
-    for item in new_list:
-        print(item)
-        print('-------------------------------------')
+    # for item in new_list:
+    #     print(item)
+    #     print('-------------------------------------')
 
     print(len(new_list))
 
