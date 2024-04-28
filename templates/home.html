@@ -763,6 +763,9 @@
                   if (img) {
                     img.src = item.image;
                   }
+                  else if (item.image == "null"){
+                    img.src = "/static/not-found.jpg";
+                  }
 
                   const priceNameDiv = mainDiv.querySelector('.price_name_div');
                   if (priceNameDiv) {
@@ -786,8 +789,13 @@
                 const imgDiv = document.createElement('div');
                 imgDiv.classList.add('img_div');
                 const img = document.createElement('img');
-                img.src = item.image;
-                img.alt = 'Image';
+                if(item.image == "null"){
+                  img.src = "/static/not-found.jpg";
+                }
+                else{
+                  img.src = item.image;
+                }
+                img.alt = 'Image Not Found';
                 imgDiv.appendChild(img);
                 const priceNameDiv = document.createElement('div');
                 priceNameDiv.classList.add('price_name_div');
