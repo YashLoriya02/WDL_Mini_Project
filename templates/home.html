@@ -611,8 +611,10 @@
       <ul class="dropdown-menu">
         <li><a class="dropdown-item dropdown-sort" href="#" data-text="Price High to Low">Price High to Low</a></li>
         <li><a class="dropdown-item dropdown-sort" href="#" data-text="Price Low to High">Price Low to High</a></li>
-        <li><a class="dropdown-item dropdown-sort" href="#" data-text="Rear Camera Low to High">Camera Low to High</a></li>
-        <li><a class="dropdown-item dropdown-sort" href="#" data-text="Rear Camera High to Low">Camera High to Low</a></li>
+        <li><a class="dropdown-item dropdown-sort" href="#" data-text="Rear Camera Low to High">Camera Low to High</a>
+        </li>
+        <li><a class="dropdown-item dropdown-sort" href="#" data-text="Rear Camera High to Low">Camera High to Low</a>
+        </li>
         <li><a class="dropdown-item dropdown-sort" href="#" data-text="Battery High to Low">Battery High to Low</a></li>
       </ul>
     </div>
@@ -753,66 +755,68 @@
             const tableDiv = document.querySelector('.table_div');
             const jsondata = data;
             const myData = jsondata.data;
-            console.log(myData);
-            if (tableDiv && tableDiv.children.length > 0) {
-              const mainDivs = document.querySelectorAll('.main_div');
-              mainDivs.forEach((mainDiv, index) => {
-                const item = myData[index];
-                if (item) {
-                  const img = mainDiv.querySelector('.img_div img');
-                  if (img) {
-                    img.src = item.image;
-                  }
-                  else if (item.image == "null"){
-                    img.src = "/static/not-found.jpg";
-                  }
+            tableDiv.innerHTML = '';
 
-                  const priceNameDiv = mainDiv.querySelector('.price_name_div');
-                  if (priceNameDiv) {
-                    priceNameDiv.innerHTML = `${item.name} - <span style="font-weight: bold;">${item.price}</span>`;
-                  }
+            // if (tableDiv && tableDiv.children.length > 0) {
+            //   const mainDivs = document.querySelectorAll('.main_div');
+            //   mainDivs.forEach((mainDiv, index) => {
+            //     const item = myData[index];
+            //     if (item) {
+            //       const img = mainDiv.querySelector('.img_div img');
+            //       if (img) {
+            //         img.src = item.image;
+            //       }
+            //       else if (item.image == "null"){
+            //         img.src = "/static/not-found.jpg";
+            //       }
 
-                  const specDivs = mainDiv.querySelectorAll('.spec_div');
-                  specDivs.forEach((specDiv, specIndex) => {
-                    const spec = item.specs[specIndex];
-                    if (spec) {
-                      specDiv.textContent = spec;
-                    }
-                  });
-                }
+            //       const priceNameDiv = mainDiv.querySelector('.price_name_div');
+            //       if (priceNameDiv) {
+            //         priceNameDiv.innerHTML = `${item.name} - <span style="font-weight: bold;">${item.price}</span>`;
+            //       }
+
+            //       const specDivs = mainDiv.querySelectorAll('.spec_div');
+            //       specDivs.forEach((specDiv, specIndex) => {
+            //         const spec = item.specs[specIndex];
+            //         if (spec) {
+            //           specDiv.textContent = spec;
+            //         }
+            //       });
+            //     }
+            //   });
+            // } 
+            // else {}
+
+            myData.forEach(item => {
+              const mainDiv = document.createElement('div');
+              mainDiv.classList.add('main_div');
+              const imgDiv = document.createElement('div');
+              imgDiv.classList.add('img_div');
+              const img = document.createElement('img');
+              if (item.image == "null") {
+                img.src = "/static/not-found.jpg";
+              }
+              else {
+                img.src = item.image;
+              }
+              img.alt = 'Image Not Found';
+              imgDiv.appendChild(img);
+              const priceNameDiv = document.createElement('div');
+              priceNameDiv.classList.add('price_name_div');
+              priceNameDiv.innerHTML = `${item.name} -&ThickSpace; <span style="font-weight: bold;">${item.price}</span>`;
+              mainDiv.appendChild(imgDiv);
+              mainDiv.appendChild(priceNameDiv);
+
+              item.specs.forEach(spec => {
+                const specDiv = document.createElement('div');
+                specDiv.classList.add('spec_div');
+                specDiv.textContent = spec;
+                mainDiv.appendChild(specDiv);
               });
 
-            } else {
-              myData.forEach(item => {
-                const mainDiv = document.createElement('div');
-                mainDiv.classList.add('main_div');
-                const imgDiv = document.createElement('div');
-                imgDiv.classList.add('img_div');
-                const img = document.createElement('img');
-                if(item.image == "null"){
-                  img.src = "/static/not-found.jpg";
-                }
-                else{
-                  img.src = item.image;
-                }
-                img.alt = 'Image Not Found';
-                imgDiv.appendChild(img);
-                const priceNameDiv = document.createElement('div');
-                priceNameDiv.classList.add('price_name_div');
-                priceNameDiv.innerHTML = `${item.name} -&ThickSpace; <span style="font-weight: bold;">${item.price}</span>`;
-                mainDiv.appendChild(imgDiv);
-                mainDiv.appendChild(priceNameDiv);
+              tableDiv.appendChild(mainDiv);
+            });
 
-                item.specs.forEach(spec => {
-                  const specDiv = document.createElement('div');
-                  specDiv.classList.add('spec_div');
-                  specDiv.textContent = spec;
-                  mainDiv.appendChild(specDiv);
-                });
-
-                tableDiv.appendChild(mainDiv);
-              });
-            }
 
           })
           .catch(error => {
